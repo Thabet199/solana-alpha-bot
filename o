@@ -1,0 +1,16 @@
+from telethon import TelegramClient, events
+
+# بيانات البوت
+api_id = 27083294  # استبدل بالـ API_ID من my.telegram.org
+api_hash = '2fee98fb465d41ad711bdf39dc40ed37'  # استبدل بالـ API_HASH
+bot_token = '8218369326:AAEDMBpc4DvB6J6CbfEe...TeiV-FU'  # استبدل بالـ Token من BotFather
+
+# تشغيل البوت
+bot = TelegramClient('bot', api_id, api_hash).start(bot_token=bot_token)
+
+@bot.on(events.NewMessage)
+async def handler(event):
+    await event.respond("✅ البوت شغال!")
+
+print("🚀 تم تشغيل البوت!")
+bot.run_until_disconnected()
