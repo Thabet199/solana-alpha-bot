@@ -1,0 +1,7 @@
+telethon
+requests
+aiohttp
+pandas
+solana
+base58
+python-dotenv
