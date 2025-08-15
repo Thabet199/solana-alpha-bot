@@ -1,25 +1,30 @@
-name: Run Solana Bot
+name: Run SOL Bot
 
 on:
-  workflow_dispatch: # تشغيل يدوي
+  workflow_dispatch:
   schedule:
-    - cron: '0 */6 * * *' # تشغيل كل 6 ساعات
+    - cron: "*/10 * * * *"  # يبدأ كل 10 دقائق (يعيد التشغيل بعد انقضاء 6 ساعات)
 
 jobs:
-  run-bot:
+  run:
     runs-on: ubuntu-latest
+    timeout-minutes: 350 # أقل من 6 ساعات
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: "3.11"
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt || true
+        run: pip install requests
 
       - name: Run bot
+        env:
+          WALLET_ADDRESS: ${{ secrets.WALLET_ADDRESS }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          SOLSNIFFER_API_KEY: ${{ secrets.SOLSNIFFER_API_KEY }}
         run: python main.py
