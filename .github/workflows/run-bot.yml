@@ -1,14 +1,16 @@
-name: Run SOL Bot
+name: Run SolSniffer Bot
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
   schedule:
-    - cron: "*/10 * * * *"  # يبدأ كل 10 دقائق (يعيد التشغيل بعد انقضاء 6 ساعات)
+    - cron: "*/5 * * * *"  # تشغيل كل 5 دقائق (يمكن تغييره)
 
 jobs:
-  run:
+  run-bot:
     runs-on: ubuntu-latest
-    timeout-minutes: 350 # أقل من 6 ساعات
 
     steps:
       - name: Checkout repository
@@ -17,14 +19,15 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: '3.10'
 
       - name: Install dependencies
-        run: pip install requests
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
 
       - name: Run bot
         env:
-          WALLET_ADDRESS: ${{ secrets.WALLET_ADDRESS }}
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           SOLSNIFFER_API_KEY: ${{ secrets.SOLSNIFFER_API_KEY }}
+          WALLET_PRIVATE_KEY: ${{ secrets.WALLET_PRIVATE_KEY }}
         run: python main.py
